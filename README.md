@@ -8,7 +8,7 @@ Research Agent -> Analysis Agent -> Writing Agent
 
 - Removed Streamlit application entrypoint.
 - Added FastAPI backend with task orchestration and clean REST APIs.
-- Added React + Vite + Tailwind + Framer Motion frontend.
+- Added React + Vite + Tailwind + Framer Motion frontend. (Using AI)
 - Added PDF generation using ReportLab.
 - Added report preview and PDF preview/download flow.
 - Added Docker and deployment configuration for modern hosting.
@@ -100,6 +100,9 @@ docker compose up --build
 - Frontend: `http://localhost:4173`
 
 ## Deployment
+
+<img width="1505" height="857" alt="Screenshot 2026-06-26 at 13 17 51" src="https://github.com/user-attachments/assets/f67d667f-ff17-4f03-905c-d4f0b31fa6c8" />
+
 
 ### Frontend (Vercel)
 
