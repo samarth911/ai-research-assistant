@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+import os
 import threading
 import time
 import uuid
@@ -14,6 +16,18 @@ from crew import research_crew
 
 DATA_DIR = Path("backend/data")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+logger = logging.getLogger(__name__)
+
+
+def _safe_error_message(exc: Exception) -> str:
+    message = str(exc).strip() or exc.__class__.__name__
+    for secret in (os.getenv("GROQ_API_KEY", ""), os.getenv("SERPER_API_KEY", "")):
+        if secret and secret in message:
+            message = message.replace(secret, "***")
+    if len(message) > 180:
+        message = f"{message[:177]}..."
+    return message
 
 
 @dataclass
@@ -124,16 +138,21 @@ class ResearchService:
                 completed_at=datetime.now(timezone.utc),
                 pdf_path=pdf_path,
             )
-        except Exception:
+        except Exception as exc:
             stop_stage_thread.set()
             stage_thread.join(timeout=1)
+            logger.exception("Research task failed for task_id=%s", task_id)
+            detail = _safe_error_message(exc)
             self._update(
                 task_id,
                 status="failed",
                 stage="failed",
                 progress=100,
                 message="Research failed",
-                error="The assistant could not complete this request. Please retry with a narrower topic.",
+                error=(
+                    "The assistant could not complete this request. "
+                    f"Please retry with a narrower topic. ({detail})"
+                ),
             )
 
     def _kickoff_with_retry(self, topic: str):

@@ -1,3 +1,9 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,6 +62,22 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/health/config")
+def health_config() -> dict[str, bool]:
+    """Check required env vars are present (values are never exposed)."""
+    required_keys = [
+        "GROQ_API_KEY",
+        "SERPER_API_KEY",
+        "RESEARCH_AGENT_LLM",
+        "ANALYST_AGENT_LLM",
+        "WRITER_AGENT_LLM",
+        "RESEARCH_AGENT_TEMPERATURE",
+        "ANALYST_AGENT_TEMPERATURE",
+        "WRITER_AGENT_TEMPERATURE",
+    ]
+    return {key: bool(os.getenv(key)) for key in required_keys}
 
 
 @app.post("/research", response_model=ResearchCreateResponse)
