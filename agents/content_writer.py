@@ -1,6 +1,4 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 from crewai import Agent, LLM
 from crewai_tools import FileWriterTool
 
@@ -24,5 +22,9 @@ content_writer_agent = Agent(
             ),
     llm=llm,
     tools=[FileWriterTool()],
-    verbose=True,
+    max_iter=2,
+    max_rpm=6,
+    max_tokens=1600,
+    respect_context_window=True,
+    verbose=False,
 )

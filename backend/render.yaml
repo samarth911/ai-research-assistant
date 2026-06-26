@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: ai-research-assistant-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    plan: starter
+    autoDeploy: true
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SERPER_API_KEY
+        sync: false
+      - key: RESEARCH_AGENT_LLM
+        value: groq/llama-3.3-70b-versatile
+      - key: ANALYST_AGENT_LLM
+        value: groq/llama-3.3-70b-versatile
+      - key: WRITER_AGENT_LLM
+        value: groq/llama-3.3-70b-versatile
+      - key: RESEARCH_AGENT_TEMPERATURE
+        value: "0.1"
+      - key: ANALYST_AGENT_TEMPERATURE
+        value: "0.2"
+      - key: WRITER_AGENT_TEMPERATURE
+        value: "0.3"

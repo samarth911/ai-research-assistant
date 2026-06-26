@@ -9,24 +9,20 @@ from tasks.research_task import research_task
 writing_task = Task(
     agent=content_writer_agent,
     description=textwrap.dedent("""
-                Create a comprehensive report on the topic: {topic}
+                Draft the final report for: {topic}
 
-                Your tasks:
-                1. Review both research findings and analysis results
-                2. Write a well-structured, comprehensive report
-                3. Ensure clarity and readability for the target audience
-                4. Include executive summary, main content, and conclusions
-                5. Cite all sources appropriately
-
-                The report should include:
+                Use the research and analysis context to write a clean, concise report.
+                Include these sections:
                 - Executive Summary
                 - Introduction
                 - Main Findings
                 - Analysis and Insights
                 - Conclusions and Recommendations
                 - Sources and References
+
+                Keep the wording professional, readable, and non-repetitive.
                 """),
-    expected_output="A comprehensive, well-structured report with executive summary and conclusions",
+    expected_output="A concise, well-structured report with the requested sections",
     context=[research_task, analysis_task],
     output_file="final_report.md"
     )

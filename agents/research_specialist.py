@@ -1,6 +1,4 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 from crewai import Agent, LLM
 from crewai_tools import SerperDevTool
 
@@ -14,6 +12,8 @@ llm = LLM(
     temperature=temperature
 )
 
+search_tool = SerperDevTool(n_results=3, save_file=False)
+
 research_specialist_agent = Agent(
     role="Research Specialist",
     goal="Gather comprehensive and accurate information on given topics from multiple sources",
@@ -23,6 +23,10 @@ research_specialist_agent = Agent(
                 "most relevant and up-to-date information on any topic."
             ),
     llm=llm,
-    tools=[SerperDevTool()],
-    verbose=True,
+    tools=[search_tool],
+    max_iter=3,
+    max_rpm=6,
+    max_tokens=1600,
+    respect_context_window=True,
+    verbose=False,
 )
